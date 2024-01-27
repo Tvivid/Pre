@@ -1,4 +1,4 @@
-package Entity;
+package com.example.preorder.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

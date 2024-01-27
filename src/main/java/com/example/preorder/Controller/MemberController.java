@@ -1,7 +1,7 @@
-package Controller;
+package com.example.preorder.Controller;
 
-import Entity.Member;
-import Service.MemberService;
+import com.example.preorder.Entity.Member;
+import com.example.preorder.Service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +18,13 @@ public class MemberController {
 
     @GetMapping("/signup")
     public String signupForm() {
-        return "signup";
+        return "signup"; // 뷰 페이지의 이름을 반환
     }
 
     @PostMapping("/signup")
     public void registerUser(@RequestBody Member member){
         memberService.registerUser(member);
     }
-
 
 
 

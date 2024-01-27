@@ -1,7 +1,7 @@
-package Service;
+package com.example.preorder.Service;
 
-import Entity.Member;
-import Repository.MemberRepository;
+import com.example.preorder.Entity.Member;
+import com.example.preorder.Repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ public class MemberService {
     @Autowired
     MailService mailService;
 
-
+    @Transactional
     public void registerUser(Member member) {
         // 사용자 정보를 저장하고 인증 이메일을 전송
         memberRepository.save(member);

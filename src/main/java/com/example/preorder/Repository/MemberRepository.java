@@ -1,6 +1,6 @@
-package Repository;
+package com.example.preorder.Repository;
 
-import Entity.Member;
+import com.example.preorder.Entity.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package Service;
+package com.example.preorder.Service;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
