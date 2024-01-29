@@ -27,7 +27,7 @@ public class Member {
 
     private String introduce;
 
-//    private String verificationToken;
+    private String verificationToken;
 
     // 팔로워 목록: 나를 팔로우하는 회원들
     @OneToMany(mappedBy = "following")
