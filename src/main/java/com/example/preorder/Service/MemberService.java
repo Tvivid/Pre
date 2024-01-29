@@ -8,7 +8,6 @@ import com.example.preorder.Repository.MemberLoginRepository;
 import com.example.preorder.Repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -39,11 +40,26 @@ public class MemberService {
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
         validateDuplicateMember(member); //중복 회원 검증
+        String tempToken= UUID.randomUUID().toString();
+        member.setVerificationToken(tempToken);
         memberRepository.save(member);
 
         String subject = "회원가입 인증";
-        String text = "회원가입을 완료하려면 아래 링크를 클릭하세요: http://your-app-url/confirm?token=" + member.getVerificationToken();
-//        mailService.sendEmail(member.getEmail(), subject, text);
+        String from = "tjsaud3250@naver.com";
+        String text = "회원가입을 완료하려면 아래 링크를 클릭하세요: http://localhost:8081/api/verify?email="+ member.getEmail()+"&token=" + member.getVerificationToken();
+        mailService.sendEmail(member.getEmail(), from, subject, text);
+    }
+
+    @Transactional
+    public void verifyUser(String email, String token){
+        Member member=memberLoginRepository.findByEmail(email)
+                .orElseThrow(NullPointerException::new);
+
+          member.setVerificationState(true);
+          memberLoginRepository.save(member);
+
+
+
     }
 
 
@@ -63,6 +79,12 @@ public class MemberService {
 
     @Transactional
     public JwtToken signIn(String email, String password) {
+
+        Member member=memberLoginRepository.findByEmail(email)
+                .orElseThrow(NullPointerException::new);
+        if(!member.isVerificationState()){
+            throw new RuntimeException("이메일 인증을 진행해주세요");
+        }
         // 1. username + password 를 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);

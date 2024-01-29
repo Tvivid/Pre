@@ -56,6 +56,13 @@ public class MemberController {
         return ResponseEntity.ok("회원 정보가 성공적으로 업데이트되었습니다.");
     }
 
+    @RequestMapping(value = "/verify", method = RequestMethod.GET)
+    public void verifyUser(@RequestParam("email") String email, @RequestParam("token") String token){
+        memberService.verifyUser(email,token);
+    }
+
+
+
 
 
 }

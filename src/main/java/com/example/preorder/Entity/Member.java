@@ -29,6 +29,8 @@ public class Member {
 
     private String verificationToken;
 
+    private boolean verificationState;
+
     // 팔로워 목록: 나를 팔로우하는 회원들
     @OneToMany(mappedBy = "following")
     private Set<Follow> followers = new HashSet<>();
