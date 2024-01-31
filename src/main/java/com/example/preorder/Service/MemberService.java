@@ -42,7 +42,9 @@ public class MemberService {
         validateDuplicateMember(member); //중복 회원 검증
         String tempToken= UUID.randomUUID().toString();
         member.setVerificationToken(tempToken);
+        member.getRoles().add("USER");
         memberRepository.save(member);
+
 
         String subject = "회원가입 인증";
         String from = "tjsaud3250@naver.com";
@@ -58,8 +60,6 @@ public class MemberService {
           member.setVerificationState(true);
           memberLoginRepository.save(member);
 
-
-
     }
 
 
@@ -71,7 +71,7 @@ public class MemberService {
 //    }
 
     private void validateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findByName(member.getName());
+        Optional<Member> findMembers = memberLoginRepository.findByEmail(member.getEmail());
         if (!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
@@ -83,7 +83,7 @@ public class MemberService {
         Member member=memberLoginRepository.findByEmail(email)
                 .orElseThrow(NullPointerException::new);
         if(!member.isVerificationState()){
-            throw new RuntimeException("이메일 인증을 진행해주세요");
+            throw new IllegalStateException("이메일 인증을 진행해주세요");
         }
         // 1. username + password 를 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
@@ -109,7 +109,7 @@ public class MemberService {
         // 회원 정보 업데이트
 
         if (memberUpdateDTO.getName() != null) {
-            member.setName(memberUpdateDTO.getName());
+            member.setUsername(memberUpdateDTO.getName());
         }
         if (memberUpdateDTO.getIntroduce() != null) {
             member.setIntroduce(memberUpdateDTO.getIntroduce());
@@ -126,6 +126,31 @@ public class MemberService {
 
         // 프로필 이미지나 기타 필드 업데이트 로직 추가 가능
         // memberRepository.save(member); // JPA의 변경 감지 기능으로 인해 save 호출 생략 가능
+    }
+
+    @Transactional
+    public void changePassword(String token, String currentPassword, String newPassword) {
+        log.info("서비스 시작");
+        // 1. JWT 토큰에서 사용자 정보 추출
+        String email = jwtTokenProvider.getAuthentication(token).getName();
+
+        log.info("토큰에서 사용자 정보는 추출했음");
+
+        // 2. 사용자 정보 조회
+        Member member = memberLoginRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        log.info("사용자는 찾음");
+        // 3. 현재 비밀번호 확인
+        if (!passwordEncoder.matches(currentPassword, member.getPassword())) {
+            log.info("비밀번호가 다름");
+            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+        }
+        log.info("비밀번호는 같음");
+        // 4. 새 비밀번호로 업데이트
+        member.setPassword(passwordEncoder.encode(newPassword));
+        memberLoginRepository.save(member);
+
+
     }
 
     /**

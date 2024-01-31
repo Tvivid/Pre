@@ -9,5 +9,5 @@ public class MemberDto {
     private String introduce;
     private byte[] profileImage;
 
-    private String password;
+
 }

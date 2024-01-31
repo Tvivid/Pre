@@ -1,11 +1,13 @@
 package com.example.preorder.Controller;
 
+import com.example.preorder.Dto.ChangePassword;
 import com.example.preorder.Dto.JwtToken;
 import com.example.preorder.Dto.LogInDTO;
 import com.example.preorder.Dto.MemberDto;
 import com.example.preorder.Entity.Member;
 
 
+import com.example.preorder.JWT.JwtTokenProvider;
 import com.example.preorder.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+
 
 
     @Autowired
@@ -47,7 +50,18 @@ public class MemberController {
         JwtToken jwtToken = memberService.signIn(email, password);
         log.info("request email = {}, password = {}", email, password);
         log.info("jwtToken accessToken = {}, refreshToken = {}", jwtToken.getAccessToken(), jwtToken.getRefreshToken());
+
         return jwtToken;
+    }
+
+    @PostMapping("/changepassword")
+    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String accessToken,
+                               @RequestBody ChangePassword changePassword) {
+
+        accessToken = accessToken.substring(7); // "Bearer " 접두어 제거
+        memberService.changePassword(accessToken, changePassword.getCurrentPassword(), changePassword.getNewPassword());
+        return ResponseEntity.ok("비밀 번호가 성공적으로 업데이트 되었습니다.");
+
     }
 
     @PostMapping("/profile/{memberId}/update")

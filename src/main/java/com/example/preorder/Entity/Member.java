@@ -1,16 +1,18 @@
 package com.example.preorder.Entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-@Entity
 @Getter
 @Setter
-public class Member {
+@Entity
+public class Member implements UserDetails {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
@@ -20,7 +22,7 @@ public class Member {
 
     private String password;
 
-    private String name;
+    private String username;
 
     @Lob
     private byte[] profileImage;
@@ -31,6 +33,8 @@ public class Member {
 
     private boolean verificationState;
 
+
+
     // 팔로워 목록: 나를 팔로우하는 회원들
     @OneToMany(mappedBy = "following")
     private Set<Follow> followers = new HashSet<>();
@@ -39,10 +43,34 @@ public class Member {
     @OneToMany(mappedBy = "follower")
     private Set<Follow> followings = new HashSet<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
 
