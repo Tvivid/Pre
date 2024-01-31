@@ -101,10 +101,12 @@ public class MemberService {
 
 
     @Transactional
-    public void updateMember(Long memberId, MemberDto memberUpdateDTO) {
+    public void updateMember(String token, MemberDto memberUpdateDTO) {
         // 회원 정보 조회
-        Member member = memberLoginRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. id=" + memberId));
+        String email = jwtTokenProvider.getAuthentication(token).getName();
+
+        Member member = memberLoginRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         // 회원 정보 업데이트
 
@@ -118,11 +120,6 @@ public class MemberService {
             member.setProfileImage(memberUpdateDTO.getProfileImage());
         }
 
-        if (memberUpdateDTO.getPassword() != null && !memberUpdateDTO.getPassword().isEmpty()) {
-            // 비밀번호 암호화 후 업데이트
-            String encryptedPassword = passwordEncoder.encode(memberUpdateDTO.getPassword());
-            member.setPassword(encryptedPassword);
-        }
 
         // 프로필 이미지나 기타 필드 업데이트 로직 추가 가능
         // memberRepository.save(member); // JPA의 변경 감지 기능으로 인해 save 호출 생략 가능
@@ -130,22 +127,20 @@ public class MemberService {
 
     @Transactional
     public void changePassword(String token, String currentPassword, String newPassword) {
-        log.info("서비스 시작");
+
         // 1. JWT 토큰에서 사용자 정보 추출
         String email = jwtTokenProvider.getAuthentication(token).getName();
-
-        log.info("토큰에서 사용자 정보는 추출했음");
 
         // 2. 사용자 정보 조회
         Member member = memberLoginRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        log.info("사용자는 찾음");
+
         // 3. 현재 비밀번호 확인
         if (!passwordEncoder.matches(currentPassword, member.getPassword())) {
-            log.info("비밀번호가 다름");
+
             throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
         }
-        log.info("비밀번호는 같음");
+
         // 4. 새 비밀번호로 업데이트
         member.setPassword(passwordEncoder.encode(newPassword));
         memberLoginRepository.save(member);

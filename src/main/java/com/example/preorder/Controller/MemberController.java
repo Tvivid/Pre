@@ -64,9 +64,10 @@ public class MemberController {
 
     }
 
-    @PostMapping("/profile/{memberId}/update")
-    public ResponseEntity<String> updateMember(@PathVariable Long memberId, @RequestBody MemberDto memberUpdateDTO) {
-        memberService.updateMember(memberId, memberUpdateDTO);
+    @PutMapping("/profile")
+    public ResponseEntity<String> updateMember(@RequestHeader("Authorization") String accessToken, @RequestBody MemberDto memberUpdateDTO) {
+        accessToken = accessToken.substring(7); // "Bearer " 접두어 제거
+        memberService.updateMember(accessToken, memberUpdateDTO);
         return ResponseEntity.ok("회원 정보가 성공적으로 업데이트되었습니다.");
     }
 
