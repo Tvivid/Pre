@@ -1,5 +1,6 @@
 package com.example.preorder.Controller;
 
+import com.example.preorder.Dto.FollowDTO;
 import com.example.preorder.Entity.Follow;
 import com.example.preorder.Service.FollowService;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,10 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping
-    public ResponseEntity<Void> follow(@RequestParam Long followerId, @RequestParam Long followingId) {
-        followService.follow(followerId, followingId);
+    public ResponseEntity<Void> follow(@RequestHeader("Authorization") String accesstoken, @RequestBody FollowDTO followingEmail) {
+
+        accesstoken=accesstoken.substring(7);
+        followService.follow(accesstoken, followingEmail.getFollowing());
         return ResponseEntity.ok().build();
     }
 

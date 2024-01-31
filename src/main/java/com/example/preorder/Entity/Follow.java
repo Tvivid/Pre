@@ -12,6 +12,7 @@ public class Follow {
     @Id @GeneratedValue
     private Long id;
 
+
     @ManyToOne
     @JoinColumn(name = "follower_id")
     private Member follower;

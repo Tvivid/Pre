@@ -2,11 +2,13 @@ package com.example.preorder.Service;
 
 import com.example.preorder.Entity.Follow;
 import com.example.preorder.Entity.Member;
+import com.example.preorder.JWT.JwtTokenProvider;
 import com.example.preorder.Repository.FollowRepository;
 import com.example.preorder.Repository.MemberLoginRepository;
 import com.example.preorder.Repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static java.rmi.server.LogStream.log;
 import static org.hibernate.query.sqm.tree.SqmNode.log;
@@ -17,20 +19,28 @@ public class FollowService {
 
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
     private final MemberLoginRepository memberLoginRepository;
 
-    public void follow(Long followerId, Long followingId){
-        log("service까지는 옴");
-        Member follower = memberLoginRepository.findById(followerId)
-                .orElseThrow(() -> new IllegalArgumentException("팔로워가 존재하지 않습니다."));
-        Member following = memberLoginRepository.findById(followingId)
-                .orElseThrow(() -> new IllegalArgumentException("팔로잉 대상이 존재하지 않습니다."));
+    @Transactional
+    public void follow(String token, String followingEmail){
+        String email = jwtTokenProvider.getAuthentication(token).getName();
+
+        Member follower = memberLoginRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("cannot find user"));
+        System.out.println(email);
+        System.out.println(followingEmail);
+
+
+
+        Member following = memberLoginRepository.findByEmail(followingEmail)
+                .orElseThrow(() -> new IllegalArgumentException("not exist following user"));
 
         Follow follow = new Follow();
         follow.setFollower(follower);
         follow.setFollowing(following);
 
-        followRepository.save(follow);
+
 
     }
 
