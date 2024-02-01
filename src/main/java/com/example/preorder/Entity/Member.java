@@ -49,6 +49,9 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "member")
     private Set<Comment> comments = new HashSet<>();
 
+    @OneToMany(mappedBy = "member")
+    private Set<Likes> likesSet = new HashSet<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();

@@ -27,7 +27,6 @@ public class Board {
 
     @CreationTimestamp
     private LocalDateTime createDate;
-    private int likes;
 
     @ManyToOne(fetch = FetchType.EAGER)  // Board = many,  User = One
     @JoinColumn(name = "userId")
@@ -35,4 +34,7 @@ public class Board {
 
     @OneToMany(mappedBy = "board")
     private Set<Comment> comments = new HashSet<>();
+
+    @OneToMany(mappedBy = "board")
+    private Set<Likes> likesSet = new HashSet<>();
 }

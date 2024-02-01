@@ -7,24 +7,23 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
-public class Follow {
-
+@Entity
+public class Likes {
     @Id @GeneratedValue
     private Long id;
-
-
     @ManyToOne
-    @JoinColumn(name = "follower_id")
-    private Member follower;
-
+    @JoinColumn(name = "board_id")
+    private Board board;
     @ManyToOne
-    @JoinColumn(name = "following_id")
-    private Member following;
-
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @CreationTimestamp
     private LocalDateTime createDate;
+
 }

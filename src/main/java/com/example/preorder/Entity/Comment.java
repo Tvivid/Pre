@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,10 +30,12 @@ public class Comment {
     @JoinColumn(name = "memberId")
     private Member member;
 
+    @OneToMany(mappedBy = "comment")
+    private Set<Likes> likesSet = new HashSet<>();
+
     @CreationTimestamp
     private LocalDateTime createDate;
 
-    private int likes;
 
 
 
