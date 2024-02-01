@@ -122,7 +122,7 @@ public class MemberService {
 
 
         // 프로필 이미지나 기타 필드 업데이트 로직 추가 가능
-        // memberRepository.save(member); // JPA의 변경 감지 기능으로 인해 save 호출 생략 가능
+         memberRepository.save(member); // JPA의 변경 감지 기능으로 인해 save 호출 생략 가능
     }
 
     @Transactional

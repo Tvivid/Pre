@@ -28,9 +28,6 @@ public class FollowService {
 
         Member follower = memberLoginRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("cannot find user"));
-        System.out.println(email);
-        System.out.println(followingEmail);
-
 
 
         Member following = memberLoginRepository.findByEmail(followingEmail)
@@ -39,6 +36,7 @@ public class FollowService {
         Follow follow = new Follow();
         follow.setFollower(follower);
         follow.setFollowing(following);
+        followRepository.save(follow);
 
 
 
