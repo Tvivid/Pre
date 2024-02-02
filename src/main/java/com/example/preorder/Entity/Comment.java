@@ -34,7 +34,7 @@ public class Comment {
     private Set<Likes> likesSet = new HashSet<>();
 
     @CreationTimestamp
-    private LocalDateTime createDate;
+    private LocalDateTime createdAt;
 
 
 

@@ -24,6 +24,6 @@ public class Likes {
     private Member member;
 
     @CreationTimestamp
-    private LocalDateTime createDate;
+    private LocalDateTime createdAt;
 
 }

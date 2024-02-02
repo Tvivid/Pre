@@ -26,7 +26,7 @@ public class Board {
     private String content;
 
     @CreationTimestamp
-    private LocalDateTime createDate;
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.EAGER)  // Board = many,  User = One
     @JoinColumn(name = "userId")

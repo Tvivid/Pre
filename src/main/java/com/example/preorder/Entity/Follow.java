@@ -26,5 +26,5 @@ public class Follow {
 
 
     @CreationTimestamp
-    private LocalDateTime createDate;
+    private LocalDateTime createdAt;
 }
