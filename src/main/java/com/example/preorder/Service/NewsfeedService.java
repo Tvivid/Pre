@@ -27,35 +27,34 @@ public class NewsfeedService {
         Member member = memberLoginRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("cannot find user"));
 
-        Set<Follow> follows = member.getFollowings();
+        Set<Member> follows = member.getFollowings();
         List<Activity> activities = new ArrayList<>();
 
-        for (Follow follow : follows){
-            Member following=follow.getFollowing();
+        for (Member follow : follows){
 
-            Set<Board>boards=following.getBoards();
+            Set<Board>boards=follow.getBoards();
             for(Board board:boards){
                 activities.add(Activity.builder()
                         .type("Board")
-                        .userName(following.getUsername())
+                        .userName(follow.getUsername())
                         .content(board.getContent())
                         .createdAt(board.getCreatedAt())
                         .build()
                        );
             }
 
-            Set<Comment>comments=following.getComments();
+            Set<Comment>comments=follow.getComments();
             for(Comment comment:comments){
                 activities.add(Activity.builder()
                         .type("Comment")
-                        .userName(following.getUsername())
+                        .userName(follow.getUsername())
                         .content(comment.getContent())
                         .createdAt(comment.getCreatedAt())
                         .build()
                 );
             }
 
-            Set<Likes>likes=following.getLikesSet();
+            Set<Likes>likes=follow.getLikesSet();
             for(Likes like:likes){
                 String likeContent;
                 if(like.getBoard()!=null){
@@ -66,7 +65,7 @@ public class NewsfeedService {
                 }
                 activities.add(Activity.builder()
                         .type("Likes")
-                        .userName(following.getUsername())
+                        .userName(follow.getUsername())
                         .content(likeContent)
                         .createdAt(like.getCreatedAt())
                         .build()
@@ -74,12 +73,13 @@ public class NewsfeedService {
 
             }
 
-            Set<Follow>followSet=following.getFollowings();
-            for(Follow friend:followSet){
+            Set<Member>followSet=follow.getFollowings();
+            for(Member friend:followSet){
+
                 activities.add(Activity.builder()
                         .type("Follow")
-                        .userName(following.getUsername())
-                        .content(friend.getFollowing().getUsername())
+                        .userName(follow.getUsername())
+                        .content(friend.getUsername()+"을 팔로우합니다.")
                         .createdAt(friend.getCreatedAt())
                         .build()
                 );

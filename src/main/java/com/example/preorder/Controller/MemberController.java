@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/v1")
 public class MemberController {
 
     private final MemberService memberService;

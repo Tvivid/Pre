@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/follows")
+@RequestMapping("/v1/follows")
 @RequiredArgsConstructor
 public class FollowController {
 

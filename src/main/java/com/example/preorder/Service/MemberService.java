@@ -48,7 +48,7 @@ public class MemberService {
 
         String subject = "회원가입 인증";
         String from = "tjsaud3250@naver.com";
-        String text = "회원가입을 완료하려면 아래 링크를 클릭하세요: http://localhost:8081/api/verify?email="+ member.getEmail()+"&token=" + member.getVerificationToken();
+        String text = "회원가입을 완료하려면 아래 링크를 클릭하세요: http://localhost:8081/v1/verify?email="+ member.getEmail()+"&token=" + member.getVerificationToken();
         mailService.sendEmail(member.getEmail(), from, subject, text);
     }
 
