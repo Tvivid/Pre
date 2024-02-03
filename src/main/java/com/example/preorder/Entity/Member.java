@@ -40,11 +40,11 @@ public class Member implements UserDetails {
 
     // 팔로워 목록: 나를 팔로우하는 회원들
     @OneToMany(mappedBy = "follower", cascade = CascadeType.REMOVE)
-    private Set<Member> followers = new HashSet<>();
+    private Set<Follow> followers = new HashSet<>();
 
     // 팔로잉 목록: 내가 팔로우하는 회원들
     @OneToMany(mappedBy = "following", cascade = CascadeType.REMOVE)
-    private Set<Member> followings = new HashSet<>();
+    private Set<Follow> followings = new HashSet<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private Set<Board> boards = new HashSet<>();
