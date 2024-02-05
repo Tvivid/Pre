@@ -48,14 +48,6 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "following", cascade = CascadeType.REMOVE)
     private Set<Follow> followings = new HashSet<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private Set<Board> boards = new HashSet<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private Set<Comment> comments = new HashSet<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private Set<Likes> likesSet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

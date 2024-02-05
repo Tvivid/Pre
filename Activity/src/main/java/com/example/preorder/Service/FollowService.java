@@ -5,7 +5,6 @@ import com.example.preorder.Entity.Member;
 import com.example.preorder.JWT.JwtTokenProvider;
 import com.example.preorder.Repository.FollowRepository;
 import com.example.preorder.Repository.MemberLoginRepository;
-import com.example.preorder.Repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FollowService {
 
     private final FollowRepository followRepository;
-    private final MemberRepository memberRepository;
+
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberLoginRepository memberLoginRepository;
 
