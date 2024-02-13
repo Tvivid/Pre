@@ -70,6 +70,9 @@ public class MemberController {
         memberService.verifyUser(email,token);
     }
 
+    @GetMapping("/member")
+    public
+
 
 
 

@@ -19,6 +19,7 @@ public class BoardService {
     private final MemberLoginRepository memberLoginRepository;
 
 
+
     @Transactional
     public void save(String token, BoardDTO boardDTO){
 
