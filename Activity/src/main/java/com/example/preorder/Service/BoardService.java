@@ -3,9 +3,8 @@ package com.example.preorder.Service;
 import com.example.preorder.Dto.BoardDTO;
 import com.example.preorder.Entity.Board;
 import com.example.preorder.Entity.Member;
-import com.example.preorder.JWT.JwtTokenProvider;
+import com.example.preorder.Feign.UserFeignClient;
 import com.example.preorder.Repository.BoardRepository;
-import com.example.preorder.Repository.MemberLoginRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,18 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final MemberLoginRepository memberLoginRepository;
+
+    private final UserFeignClient userFeignClient;
+
+
 
 
 
     @Transactional
     public void save(String token, BoardDTO boardDTO){
 
-        String email = jwtTokenProvider.getAuthentication(token).getName();
-
-        Member member = memberLoginRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("cannot find user"));
+        Member member = userFeignClient.getMember(token);
 
         String title=boardDTO.getTitle();
         String content= boardDTO.getContent();

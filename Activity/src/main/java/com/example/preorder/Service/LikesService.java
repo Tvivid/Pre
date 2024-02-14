@@ -5,11 +5,10 @@ import com.example.preorder.Entity.Board;
 import com.example.preorder.Entity.Comment;
 import com.example.preorder.Entity.Likes;
 import com.example.preorder.Entity.Member;
-import com.example.preorder.JWT.JwtTokenProvider;
+import com.example.preorder.Feign.UserFeignClient;
 import com.example.preorder.Repository.BoardRepository;
 import com.example.preorder.Repository.CommentRepository;
 import com.example.preorder.Repository.LikesRepository;
-import com.example.preorder.Repository.MemberLoginRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,21 +17,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class LikesService {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final MemberLoginRepository memberLoginRepository;
 
     private final BoardRepository boardRepository;
 
     private final CommentRepository commentRepository;
     private final LikesRepository likesRepository;
 
+    private final UserFeignClient userFeignClient;
+
 
     @Transactional
     public void likeTarget(String token, LikesDTO likesDTO){
-        String email = jwtTokenProvider.getAuthentication(token).getName();
-
-        Member member = memberLoginRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("cannot find user"));
+        Member member = userFeignClient.getMember(token);
 
         Likes likes = new Likes();
         likes.setMember(member);

@@ -2,7 +2,7 @@ package com.example.preorder.Service;
 
 import com.example.preorder.Entity.Follow;
 import com.example.preorder.Entity.Member;
-import com.example.preorder.JWT.JwtTokenProvider;
+import com.example.preorder.Feign.UserFeignClient;
 import com.example.preorder.Repository.FollowRepository;
 import com.example.preorder.Repository.MemberLoginRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,16 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class FollowService {
 
     private final FollowRepository followRepository;
+    private final UserFeignClient userFeignClient;
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final MemberLoginRepository memberLoginRepository;
+
 
     @Transactional
     public void follow(String token, String followingEmail){
-        String email = jwtTokenProvider.getAuthentication(token).getName();
-
-        Member follower = memberLoginRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("cannot find user"));
+        Member follower = userFeignClient.getMember(token);
 
 
         Member following = memberLoginRepository.findByEmail(followingEmail)
