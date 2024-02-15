@@ -1,10 +1,12 @@
 package com.example.preorder.Service;
 
 
+import com.example.preorder.Dto.Activity;
 import com.example.preorder.Dto.CommentDTO;
 import com.example.preorder.Entity.Board;
 import com.example.preorder.Entity.Comment;
 import com.example.preorder.Entity.Member;
+import com.example.preorder.Feign.NewsFeedClient;
 import com.example.preorder.Feign.UserFeignClient;
 
 import com.example.preorder.Repository.BoardRepository;
@@ -25,6 +27,8 @@ public class CommentService {
 
     private final UserFeignClient userFeignClient;
 
+    private final NewsFeedClient newsFeedClient;
+
 
 
 
@@ -34,7 +38,7 @@ public class CommentService {
     public void save(String token, CommentDTO commentDTO){
 
 
-        Member member = userFeignClient.getMember(token);
+        Long member = userFeignClient.getMember(token);
 
 
         Board board = boardRepository.findById(commentDTO.getBoardId())
@@ -42,10 +46,19 @@ public class CommentService {
 
         Comment comment = new Comment();
 
-        comment.setMember(member);
+        comment.setMemberId(member);
         comment.setContent(commentDTO.getContent());
         comment.setBoard(board);
         commentRepository.save(comment);
+
+
+        Activity activity = Activity.builder()
+                .type("Comment")
+                .memberId(member)
+                .content(commentDTO.getContent())
+                .build();
+
+        newsFeedClient.createActivity(activity);
 
 
     }

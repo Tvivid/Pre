@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Builder
 @Data
-public class Activity implements Comparable<Activity> {
+public class ActivityDTO implements Comparable<ActivityDTO> {
     private String type; // 활동 타입 (예: Post, Comment, Like)
     private String userName; // 활동한 사용자 ID
     private String content; // 활동 내용
@@ -18,7 +18,7 @@ public class Activity implements Comparable<Activity> {
 
     // 최신 활동이 먼저 오도록 정렬
     @Override
-    public int compareTo(Activity activity) {
+    public int compareTo(ActivityDTO activity) {
         return activity.createdAt.compareTo(this.createdAt);
     }
 }

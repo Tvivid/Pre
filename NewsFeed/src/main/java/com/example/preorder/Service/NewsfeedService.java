@@ -1,9 +1,10 @@
 package com.example.preorder.Service;
 
 import com.example.preorder.Dto.Activity;
+import com.example.preorder.Dto.ActivityDTO;
 import com.example.preorder.Entity.*;
-import com.example.preorder.JWT.JwtTokenProvider;
-import com.example.preorder.Repository.MemberLoginRepository;
+import com.example.preorder.Feign.UserFeignClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,19 +14,17 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class NewsfeedService {
-    @Autowired
-    private MemberLoginRepository memberLoginRepository;
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+
+    private UserFeignClient userFeignClient;
 
     public List<Activity> newsfeed(String token){
 
-        String email = jwtTokenProvider.getAuthentication(token).getName();
 
-        Member member = memberLoginRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("cannot find user"));
+        Long memberId = userFeignClient.getMember(token);
+
 
         Set<Follow> follows = member.getFollowers();
         List<Activity> activities = new ArrayList<>();
@@ -97,6 +96,8 @@ public class NewsfeedService {
         return activities;
 
     }
+
+
 
 
 }

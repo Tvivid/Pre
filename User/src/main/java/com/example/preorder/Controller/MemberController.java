@@ -70,9 +70,9 @@ public class MemberController {
         memberService.verifyUser(email,token);
     }
 
-    @GetMapping("/member")
-    public Member getMember(@RequestParam("token") String token){
-        Member member = memberService.findUser(token);
+    @GetMapping("internal/member")
+    public Long getMember(@RequestParam("token") String token){
+        Long member = memberService.findUser(token);
         return member;
     }
 

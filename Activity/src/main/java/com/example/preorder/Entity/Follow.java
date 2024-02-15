@@ -15,13 +15,12 @@ public class Follow {
     private Long id;
 
 
-    @ManyToOne
-    @JoinColumn(name = "follower_id")
-    private Member follower;
+    @Column(name = "followerId")
+    private Long follower;
 
-    @ManyToOne
-    @JoinColumn(name = "following_id")
-    private Member following;
+
+    @Column(name = "followingId")
+    private Long following;
 
 
     @CreationTimestamp

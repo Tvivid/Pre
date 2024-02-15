@@ -18,9 +18,9 @@ public class Likes {
     @ManyToOne
     @JoinColumn(name = "comment_id")
     private Comment comment;
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @Column(name = "memberId")
+    private Long memberId;
+
 
     @CreationTimestamp
     private LocalDateTime createdAt;

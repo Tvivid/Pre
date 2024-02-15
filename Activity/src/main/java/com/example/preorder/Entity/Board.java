@@ -27,9 +27,8 @@ public class Board {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.EAGER)  // Board = many,  User = One
-    @JoinColumn(name = "userId")
-    private Member member; // DB는 오브젝트를 저장할 수 없다. FK, 자바는 오브젝트를 저장할 수 있다.
+    @Column(name = "userId")
+    private Long memberId; // DB는 오브젝트를 저장할 수 없다. FK, 자바는 오브젝트를 저장할 수 있다.
 
     @OneToMany(mappedBy = "board")
     private Set<Comment> comments = new HashSet<>();

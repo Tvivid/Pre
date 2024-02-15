@@ -28,8 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests()
                 // 해당 API에 대해서는 모든 요청을 허가
-                .requestMatchers("/v1/signup","/v1/signin","/v1/profile/{memberId}","/v1/follow","/v1/verify",
-                        "/v1/changepassword","/v1/profile","/v1/board","/v1/comment","/v1/like-target","/v1/newsfeed").permitAll()
+                .requestMatchers("/v1/newsfeed").permitAll()
                 // USER 권한이 있어야 요청할 수 있음
 //                .requestMatchers().hasRole("USER")
                 // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정

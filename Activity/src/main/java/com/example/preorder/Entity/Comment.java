@@ -24,9 +24,8 @@ public class Comment {
     @JoinColumn(name = "boardId")
     private Board board;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "memberId")
-    private Member member;
+    @Column(name = "memberId")
+    private Long memberId;
 
     @OneToMany(mappedBy = "comment")
     private Set<Likes> likesSet = new HashSet<>();

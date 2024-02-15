@@ -149,14 +149,15 @@ public class MemberService {
     }
 
     @Transactional
-    public Member findUser(String token){
+    public Long findUser(String token){
         String email = jwtTokenProvider.getAuthentication(token).getName();
 
         // 2. 사용자 정보 조회
         Member member = memberLoginRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        Long memberId = member.getId();
 
-        return member;
+        return memberId;
 
 
     }
