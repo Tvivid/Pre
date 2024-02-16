@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class FollowService {
@@ -49,8 +51,17 @@ public class FollowService {
 
     }
 
+    @Transactional
     public void unfollow(Long followId) {
         followRepository.deleteById(followId);
+    }
+
+
+    @Transactional
+    public Set<Long> getFollowing(Long memberId){
+        Set<Long> followList = followRepository.findFollowingIdsByFollowerId(memberId);
+
+        return followList;
     }
 
 

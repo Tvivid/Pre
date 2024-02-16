@@ -1,6 +1,8 @@
 package com.example.preorder.Controller;
 
-import com.example.preorder.Dto.Activity;
+
+import com.example.preorder.Dto.ActivityDTO;
+import com.example.preorder.Entity.Activity;
 import com.example.preorder.Service.NewsfeedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class NewsfeedController {
     }
 
     @PostMapping("/create")
-    void createActivity(Activity activity){
+    void createActivity(ActivityDTO activity){
         newsfeedService.create(activity);
     };
 }
